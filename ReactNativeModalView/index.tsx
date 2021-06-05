@@ -91,18 +91,19 @@ const ReactNativeModalView: React.FC<{
     <TouchableWithoutFeedback onPress={onBackdropPress}>
       <Animatable.View ref={backdropRef} animation={backdropAnimation.fadeIn} style={[backdropStyle || styles.backdrop]}>
         <StatusBar barStyle="light-content" />
-        <View style={[modalStyle || styles.modal]}>
-          <Animatable.View
-            ref={animatedViewRef}
-            animation={animationIn}
-            direction="alternate"
-            duration={500}
-            style={[styles.modalView]}
-            pointerEvents="box-only"
-          >
-            {children}
-          </Animatable.View>
-        </View>
+        <TouchableWithoutFeedback>
+          <View style={[modalStyle || styles.modal]}>
+            <Animatable.View
+              ref={animatedViewRef}
+              animation={animationIn}
+              direction="alternate"
+              duration={500}
+              style={[styles.modalView]}
+            >
+              {children}
+            </Animatable.View>
+          </View>
+        </TouchableWithoutFeedback>
       </Animatable.View>
     </TouchableWithoutFeedback>
   )
