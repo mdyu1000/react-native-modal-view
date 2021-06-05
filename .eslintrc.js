@@ -1,11 +1,5 @@
 module.exports = {
-  extends: [
-    'airbnb',
-    'prettier',
-    'prettier/react',
-    'plugin:prettier/recommended',
-    'eslint-config-prettier',
-  ],
+  extends: ['airbnb', 'prettier', 'prettier/react', 'plugin:prettier/recommended', 'eslint-config-prettier'],
   parser: 'babel-eslint',
   // plugins: ['jest'],
   plugins: ['prettier', 'react-hooks'],
@@ -19,8 +13,8 @@ module.exports = {
   //   'jest/globals': true,
   // },
   rules: {
-    'max-len': [2, {code: 110, tabWidth: 2, ignoreUrls: true}],
-    'react/jsx-filename-extension': ['error', {extensions: ['.js', '.jsx']}],
+    'max-len': [2, { code: 110, tabWidth: 2, ignoreUrls: true }],
+    'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'global-require': 'off',
     'no-console': 'off',
     'import/no-extraneous-dependencies': 'off',
@@ -38,10 +32,7 @@ module.exports = {
     'react/jsx-fragments': 'off',
     semi: ['error', 'never'],
     'no-restricted-syntax': ['error', 'LabeledStatement', 'WithStatement'],
-    'no-use-before-define': [
-      'error',
-      {functions: true, classes: true, variables: false},
-    ], // disable the rule for variables, but enable it for functions and classes
+    'no-use-before-define': ['error', { functions: true, classes: true, variables: false }], // disable the rule for variables, but enable it for functions and classes
     'prettier/prettier': [
       // copy from prettierrc.js
       'error',
@@ -58,4 +49,4 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn', // 檢查 effect 的相依性
     'no-unused-expressions': 'off',
   },
-};
+}
