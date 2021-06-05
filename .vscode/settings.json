@@ -1,0 +1,22 @@
+{
+  "files.associations": {
+    "*.js": "javascriptreact"
+  },
+  "prettier.eslintIntegration": true,
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "cSpell.words": [
+    "Crashlytics",
+    "Keychain",
+    "Pressable",
+    "ZINDEX",
+    "choosed",
+    "clonedeep",
+    "dropoff",
+    "formated",
+    "twilio",
+    "uniqby",
+    "viewability",
+    "yoxi"
+  ]
+}
