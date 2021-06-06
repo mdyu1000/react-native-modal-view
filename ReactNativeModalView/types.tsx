@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import {
   GestureResponderEvent,
   ViewStyle,
+  BackHandlerStatic
 } from 'react-native'
 import { Animation, CustomAnimation } from 'react-native-animatable'
 export interface IBackdropAnimation {
@@ -23,6 +24,7 @@ export interface IReactNativeModalView {
   modalStyle?: ViewStyle | null
   zIndex?: number,
   onBackdropPress?: (event: GestureResponderEvent) => void
+  onBackButtonPress?: () => void
   onModalShow?: () => void
   onModalWillShow?: () => void
   onModalHide?: () => void

@@ -88,6 +88,7 @@ const App = () => {
           isVisible={isVisible}
           modalStyle={modalStyle}
           onBackdropPress={toggleVisible}
+          onBackButtonPress={toggleVisible}
           onModalHide={initModal}
         >
           <View>

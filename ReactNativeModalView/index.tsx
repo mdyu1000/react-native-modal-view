@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import { StyleSheet, View, TouchableWithoutFeedback, StatusBar } from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { IBackdropAnimation, IReactNativeModalView } from './types'
+import { useAndroidBack } from './lib'
 
 // issue: https://github.com/osdnk/react-native-reanimated-bottom-sheet/issues/282
 const COVER_REACT_NATIVE_REANIMATED_BOTTOM_SHEET_ZINDEX = 101
@@ -33,6 +34,7 @@ function ReactNativeModalView(props: IReactNativeModalView): React.ReactElement 
     modalStyle,
     zIndex,
     onBackdropPress,
+    onBackButtonPress,
     onModalShow,
     onModalWillShow,
     onModalHide,
@@ -59,6 +61,10 @@ function ReactNativeModalView(props: IReactNativeModalView): React.ReactElement 
   const handleAnimationEnd = () => {
     if (isVisible) onModalShow?.()
   }
+
+  useAndroidBack(() => {
+    onBackButtonPress?.()
+  })
 
   useEffect(() => {
     if (isVisible) {
