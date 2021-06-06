@@ -116,7 +116,7 @@ const App = () => {
               labore et dolore magna aliqua.
             </Text>
             <Pressable style={[styles.action]} onPress={toggleVisible}>
-              <Text style={[styles.actionText]}>Confirm</Text>
+              <Text style={[styles.actionText]}>Close</Text>
             </Pressable>
           </View>
         </ReactNativeModalView>
