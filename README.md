@@ -1,1 +1,1 @@
-# react-native-modal-view
+# rn-modal-view
