@@ -17,24 +17,25 @@ const backdropAnimation: IBackdropAnimation = {
   },
 }
 
-const ReactNativeModalView: React.FC<IReactNativeModalView> = ({
-  animationIn,
-  animationInTiming,
-  animationOut,
-  animationOutTiming,
-  backdropStyle,
-  backdropTransitionInTiming,
-  backdropTransitionOutTiming,
-  children,
-  hasBackdrop,
-  isVisible,
-  modalStyle,
-  onBackdropPress,
-  onModalShow,
-  onModalWillShow,
-  onModalHide,
-  onModalWillHide,
-}) => {
+function ReactNativeModalView(props: IReactNativeModalView): React.ReactElement {
+  const {
+    animationIn,
+    animationInTiming,
+    animationOut,
+    animationOutTiming,
+    backdropStyle,
+    backdropTransitionInTiming,
+    backdropTransitionOutTiming,
+    children,
+    hasBackdrop,
+    isVisible,
+    modalStyle,
+    onBackdropPress,
+    onModalShow,
+    onModalWillShow,
+    onModalHide,
+    onModalWillHide,
+  } = props
   const animatedViewRef = useRef<any>(null)
   const backdropRef = useRef<any>(null)
   const [isShow, setIsShow] = useState(isVisible)

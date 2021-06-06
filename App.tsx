@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Pressable, Text, View, StyleSheet, ViewStyle } from 'react-native'
 import { Animation } from 'react-native-animatable'
 import ReactNativeModalView from './ReactNativeModalView'
@@ -13,7 +13,7 @@ const App = () => {
   // additional modal
   const [isVisible2, setIsVisible2] = useState(false)
   const [modalStyle2, setModalStyle2] = useState<ViewStyle | null>(null)
-  //
+
   const toggleVisible = () => {
     setIsVisible(!isVisible)
     setIsVisible2(false)
@@ -88,13 +88,7 @@ const App = () => {
           isVisible={isVisible}
           modalStyle={modalStyle}
           onBackdropPress={toggleVisible}
-          onModalHide={() => {
-            initModal()
-            console.log('onModalHide')
-          }}
-          onModalShow={() => console.log('onModalShow')}
-          onModalWillShow={() => console.log('onModalWillShow')}
-          onModalWillHide={() => console.log('onModalWillHide')}
+          onModalHide={initModal}
         >
           <View>
             <Text style={[styles.title]}>Title</Text>
