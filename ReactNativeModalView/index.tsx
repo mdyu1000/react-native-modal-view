@@ -76,9 +76,7 @@ const ReactNativeModalView: React.FC<IReactNativeModalView> = ({
         animation={hasBackdrop ? backdropAnimation.fadeIn : undefined}
         duration={backdropTransitionInTiming}
         style={
-          hasBackdrop
-            ? [backdropStyle || styles.backdrop]
-            : [styles.backdrop, styles.backdropTransparent]
+          hasBackdrop ? [backdropStyle || styles.backdrop] : [styles.backdrop, styles.backdropTransparent]
         }
       >
         <StatusBar barStyle={hasBackdrop ? 'light-content' : 'dark-content'} />
@@ -107,7 +105,7 @@ const styles = StyleSheet.create({
     elevation: 13,
   },
   backdropTransparent: {
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   modal: {
     marginTop: 'auto',
@@ -130,6 +128,6 @@ ReactNativeModalView.defaultProps = {
   backdropTransitionInTiming: 300,
   backdropTransitionOutTiming: 300,
   hasBackdrop: true,
-} as Partial<IReactNativeModalView>;
+}
 
 export default ReactNativeModalView
