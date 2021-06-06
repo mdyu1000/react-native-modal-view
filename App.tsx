@@ -14,17 +14,17 @@ const App = () => {
   const [isVisible2, setIsVisible2] = useState(false)
   const [modalStyle2, setModalStyle2] = useState<ViewStyle | null>(null)
   //
-  const toggleVisible = () => setIsVisible(!isVisible)
+  const toggleVisible = () => {
+    setIsVisible(!isVisible)
+    setIsVisible2(false)
+  }
 
   const initModal = () => {
     setModalStyle(null)
+    setModalStyle2(null)
     setAnimationIn('fadeInUp')
     setAnimationOut('fadeOutDown')
     setHasBackdrop(true)
-  }
-
-  const handlePressDefault = () => {
-    toggleVisible()
   }
 
   const handlePressBottom = () => {
@@ -51,6 +51,12 @@ const App = () => {
     setAnimationOut('fadeOutRight')
   }
 
+  const handlePressMultipleModal = () => {
+    toggleVisible()
+    setIsVisible2(true)
+    setModalStyle2({ marginTop: 'auto' })
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -60,7 +66,7 @@ const App = () => {
           alignItems: 'center',
         }}
       >
-        <Pressable style={[styles.button]} onPress={handlePressDefault}>
+        <Pressable style={[styles.button]} onPress={toggleVisible}>
           <Text>Default</Text>
         </Pressable>
         <Pressable style={[styles.button]} onPress={handlePressBottom}>
@@ -72,12 +78,39 @@ const App = () => {
         <Pressable style={[styles.button]} onPress={handlePressBottomNoBackdrop}>
           <Text>Bottom no backdrop</Text>
         </Pressable>
+        <Pressable style={[styles.button]} onPress={handlePressMultipleModal}>
+          <Text>Multiple Modal</Text>
+        </Pressable>
         <ReactNativeModalView
           animationIn={animationIn}
           animationOut={animationOut}
           hasBackdrop={hasBackdrop}
           isVisible={isVisible}
           modalStyle={modalStyle}
+          onBackdropPress={toggleVisible}
+          onModalHide={() => {
+            initModal()
+            console.log('onModalHide')
+          }}
+          onModalShow={() => console.log('onModalShow')}
+          onModalWillShow={() => console.log('onModalWillShow')}
+          onModalWillHide={() => console.log('onModalWillHide')}
+        >
+          <View>
+            <Text style={[styles.title]}>Title</Text>
+            <Text style={[styles.content]}>
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+              labore et dolore magna aliqua.
+            </Text>
+            <Pressable style={[styles.action]} onPress={toggleVisible}>
+              <Text style={[styles.actionText]}>Close</Text>
+            </Pressable>
+          </View>
+        </ReactNativeModalView>
+        <ReactNativeModalView
+          isVisible={isVisible2}
+          modalStyle={modalStyle2}
+          hasBackdrop={false}
           onBackdropPress={toggleVisible}
           onModalHide={initModal}
         >

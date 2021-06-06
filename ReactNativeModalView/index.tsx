@@ -1,38 +1,9 @@
-import React, { useRef, ReactNode, useState, useEffect } from 'react'
-import {
-  StyleSheet,
-  View,
-  TouchableWithoutFeedback,
-  GestureResponderEvent,
-  ViewStyle,
-  StatusBar,
-} from 'react-native'
+import React, { useRef, useState, useEffect } from 'react'
+import { StyleSheet, View, TouchableWithoutFeedback, StatusBar } from 'react-native'
 import * as Animatable from 'react-native-animatable'
-import { Animation, CustomAnimation } from 'react-native-animatable'
+import { IBackdropAnimation, IReactNativeModalView } from './types'
 
 const COVER_BOTTOMSHEET_ZINDEX = 101
-
-interface IBackdropAnimation {
-  fadeIn: CustomAnimation
-  fadeOut: CustomAnimation
-}
-
-interface IReactNativeModalView {
-  animationIn?: Animation
-  animationInTiming?: number
-  animationOut?: Animation
-  animationOutTiming?: number
-  backdropStyle?: ViewStyle
-  children: ReactNode
-  hasBackdrop: boolean,
-  isVisible: boolean
-  modalStyle?: ViewStyle | null
-  onBackdropPress?: (event: GestureResponderEvent) => void
-  onModalShow?: () => void
-  onModalWillShow?: () => void
-  onModalHide?: () => void
-  onModalWillHide?: () => void
-}
 
 const backdropAnimation: IBackdropAnimation = {
   fadeIn: {
@@ -52,6 +23,8 @@ const ReactNativeModalView: React.FC<IReactNativeModalView> = ({
   animationOut,
   animationOutTiming,
   backdropStyle,
+  backdropTransitionInTiming,
+  backdropTransitionOutTiming,
   children,
   hasBackdrop,
   isVisible,
@@ -66,30 +39,33 @@ const ReactNativeModalView: React.FC<IReactNativeModalView> = ({
   const backdropRef = useRef<any>(null)
   const [isShow, setIsShow] = useState(isVisible)
 
-  const animateIn = () => {
-    animatedViewRef.current?.animate(animationIn, animationInTiming).then(() => {
-      onModalShow?.()
-    })
-  }
-
   const animateOut = () => {
-    animatedViewRef.current?.animate(animationOut, animationOutTiming).then(() => {
+    const animations = []
+    if (animatedViewRef.current) {
+      animations.push(animatedViewRef.current.animate(animationOut, animationOutTiming))
+    }
+    if (backdropRef.current && hasBackdrop) {
+      animations.push(backdropRef.current.animate(backdropAnimation.fadeOut, backdropTransitionOutTiming))
+    }
+    Promise.all(animations).then(() => {
       onModalHide?.()
       setIsShow(false)
     })
-    if(hasBackdrop) backdropRef.current?.animate(backdropAnimation.fadeOut)
+  }
+
+  const handleAnimationEnd = () => {
+    if (isVisible) onModalShow?.()
   }
 
   useEffect(() => {
     if (isVisible) {
       onModalWillShow?.()
-      animateIn()
       setIsShow(true)
     } else {
       onModalWillHide?.()
       animateOut()
     }
-  }, [animatedViewRef, backdropRef, isVisible])
+  }, [isVisible])
 
   if (!isShow) return <View />
 
@@ -98,17 +74,22 @@ const ReactNativeModalView: React.FC<IReactNativeModalView> = ({
       <Animatable.View
         ref={backdropRef}
         animation={hasBackdrop ? backdropAnimation.fadeIn : undefined}
-        style={hasBackdrop ? [backdropStyle || styles.backdrop] : [styles.backdrop, {backgroundColor: 'rgba(0,0,0,0)'}]}
+        duration={backdropTransitionInTiming}
+        style={
+          hasBackdrop
+            ? [backdropStyle || styles.backdrop]
+            : [styles.backdrop, styles.backdropTransparent]
+        }
       >
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle={hasBackdrop ? 'light-content' : 'dark-content'} />
         <TouchableWithoutFeedback>
           <View style={[modalStyle || styles.modal]}>
             <Animatable.View
               ref={animatedViewRef}
               animation={animationIn}
-              direction="alternate"
-              duration={500}
+              duration={animationInTiming}
               style={[styles.modalView]}
+              onAnimationEnd={handleAnimationEnd}
             >
               {children}
             </Animatable.View>
@@ -125,6 +106,9 @@ const styles = StyleSheet.create({
     zIndex: COVER_BOTTOMSHEET_ZINDEX,
     elevation: 13,
   },
+  backdropTransparent: {
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
   modal: {
     marginTop: 'auto',
     marginBottom: 'auto',
@@ -140,8 +124,12 @@ const styles = StyleSheet.create({
 
 ReactNativeModalView.defaultProps = {
   animationIn: 'fadeInUp',
+  animationInTiming: 500,
   animationOut: 'fadeOutDown',
+  animationOutTiming: 500,
+  backdropTransitionInTiming: 300,
+  backdropTransitionOutTiming: 300,
   hasBackdrop: true,
-}
+} as Partial<IReactNativeModalView>;
 
 export default ReactNativeModalView
