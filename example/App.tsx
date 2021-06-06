@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Pressable, Text, View, StyleSheet, ViewStyle } from 'react-native'
 import { Animation } from 'react-native-animatable'
-import ReactNativeModalView from './ReactNativeModalView'
+import ReactNativeModalView from '../src/'
 
 const App = () => {
   // Base Modal
