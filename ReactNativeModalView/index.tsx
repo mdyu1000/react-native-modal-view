@@ -3,7 +3,8 @@ import { StyleSheet, View, TouchableWithoutFeedback, StatusBar } from 'react-nat
 import * as Animatable from 'react-native-animatable'
 import { IBackdropAnimation, IReactNativeModalView } from './types'
 
-const COVER_BOTTOMSHEET_ZINDEX = 101
+// issue: https://github.com/osdnk/react-native-reanimated-bottom-sheet/issues/282
+const COVER_REACT_NATIVE_REANIMATED_BOTTOM_SHEET_ZINDEX = 101
 
 const backdropAnimation: IBackdropAnimation = {
   fadeIn: {
@@ -30,6 +31,7 @@ function ReactNativeModalView(props: IReactNativeModalView): React.ReactElement 
     hasBackdrop,
     isVisible,
     modalStyle,
+    zIndex,
     onBackdropPress,
     onModalShow,
     onModalWillShow,
@@ -72,38 +74,43 @@ function ReactNativeModalView(props: IReactNativeModalView): React.ReactElement 
 
   return (
     <TouchableWithoutFeedback onPress={onBackdropPress}>
-      <Animatable.View
-        ref={backdropRef}
-        animation={hasBackdrop ? backdropAnimation.fadeIn : undefined}
-        duration={backdropTransitionInTiming}
-        style={
-          hasBackdrop ? [backdropStyle || styles.backdrop] : [styles.backdrop, styles.backdropTransparent]
-        }
-      >
-        <StatusBar barStyle={hasBackdrop ? 'light-content' : 'dark-content'} />
-        <TouchableWithoutFeedback>
-          <View style={[modalStyle || styles.modal]}>
-            <Animatable.View
-              ref={animatedViewRef}
-              animation={animationIn}
-              duration={animationInTiming}
-              style={[styles.modalView]}
-              onAnimationEnd={handleAnimationEnd}
-            >
-              {children}
-            </Animatable.View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Animatable.View>
+      <View style={[styles.absoluteTop, { zIndex, elevation: zIndex }]}>
+        <Animatable.View
+          ref={backdropRef}
+          animation={hasBackdrop ? backdropAnimation.fadeIn : undefined}
+          duration={backdropTransitionInTiming}
+          style={
+            hasBackdrop ? [backdropStyle || styles.backdrop] : [styles.backdrop, styles.backdropTransparent]
+          }
+        >
+          <StatusBar barStyle={hasBackdrop ? 'light-content' : 'dark-content'} />
+          <TouchableWithoutFeedback>
+            <View style={[modalStyle || styles.modal]}>
+              <Animatable.View
+                ref={animatedViewRef}
+                animation={animationIn}
+                duration={animationInTiming}
+                style={[styles.modalView]}
+                onAnimationEnd={handleAnimationEnd}
+              >
+                {children}
+              </Animatable.View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Animatable.View>
+      </View>
     </TouchableWithoutFeedback>
   )
 }
 
 const styles = StyleSheet.create({
+  absoluteTop: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: COVER_REACT_NATIVE_REANIMATED_BOTTOM_SHEET_ZINDEX,
+    elevation: COVER_REACT_NATIVE_REANIMATED_BOTTOM_SHEET_ZINDEX,
+  },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    zIndex: COVER_BOTTOMSHEET_ZINDEX,
-    elevation: 13,
   },
   backdropTransparent: {
     backgroundColor: 'rgba(0,0,0,0)',
@@ -129,6 +136,7 @@ ReactNativeModalView.defaultProps = {
   backdropTransitionInTiming: 300,
   backdropTransitionOutTiming: 300,
   hasBackdrop: true,
+  zIndex: COVER_REACT_NATIVE_REANIMATED_BOTTOM_SHEET_ZINDEX,
 }
 
 export default ReactNativeModalView

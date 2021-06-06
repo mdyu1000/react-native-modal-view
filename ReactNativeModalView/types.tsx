@@ -21,6 +21,7 @@ export interface IReactNativeModalView {
   hasBackdrop?: boolean,
   isVisible: boolean
   modalStyle?: ViewStyle | null
+  zIndex?: number,
   onBackdropPress?: (event: GestureResponderEvent) => void
   onModalShow?: () => void
   onModalWillShow?: () => void
